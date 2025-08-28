@@ -1,0 +1,76 @@
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+:root {
+  --bg: #f4f4f9;
+  --card: #fff;
+  --text: #222;
+}
+body.dark {
+  --bg: #1e1e2f;
+  --card: #2a2a40;
+  --text: #f1f1f1;
+}
+
+header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 2rem; background: var(--card);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+header h1 { font-size: 1.5rem; }
+header button {
+  background: none; border: none; font-size: 1.4rem; cursor: pointer;
+}
+
+main {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+  padding: 2rem;
+}
+.card {
+  background: var(--card);
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.card h2 { margin-bottom: 1rem; }
+
+form {
+  display: flex; gap: 0.5rem; margin-bottom: 1rem;
+}
+form input, form button {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+form button {
+  background: #4f46e5;
+  color: white; border: none;
+  cursor: pointer; transition: background 0.2s;
+}
+form button:hover { background: #3730a3; }
+
+ul { list-style: none; }
+li {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background: rgba(0,0,0,0.05);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  animation: fadeIn 0.3s ease;
+}
+li.completed span { text-decoration: line-through; opacity: 0.6; }
+li button {
+  background: none; border: none; cursor: pointer;
+  font-size: 1.1rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

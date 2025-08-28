@@ -1,149 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>To-Do & Alarm App</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@tailwindcss/forms"></script>
-  <script src="https://cdn.jsdelivr.net/npm/uuid@9.0.0/dist/umd/uuidv4.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fancy To-Do & Alarm</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-all">
-
-  <!-- Header -->
-  <header class="flex justify-between items-center p-4 shadow-md bg-white dark:bg-gray-800">
-    <h1 class="text-2xl font-bold">🌟 To-Do & Alarm</h1>
-    <button id="themeToggle" class="px-3 py-2 rounded-xl bg-gray-200 dark:bg-gray-700">
-      Toggle Theme
-    </button>
+<body>
+  <header>
+    <h1>🌟 Fancy To-Do & Alarm</h1>
+    <button id="themeToggle">🌙</button>
   </header>
 
-  <main class="p-6 grid md:grid-cols-2 gap-6">
-
+  <main>
     <!-- To-Do Section -->
-    <section class="p-5 rounded-2xl shadow-lg bg-white dark:bg-gray-800">
-      <h2 class="text-xl font-semibold mb-4">📝 My Tasks</h2>
-      <form id="taskForm" class="flex gap-2 mb-4">
-        <input type="text" id="taskInput" placeholder="Enter your goal..."
-          class="flex-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 px-3 py-2">
-        <input type="date" id="taskDate" class="rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 px-2">
-        <button type="submit" class="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600">Add</button>
+    <section class="card">
+      <h2>📝 My Tasks</h2>
+      <form id="taskForm">
+        <input type="text" id="taskInput" placeholder="Enter a task..." required>
+        <input type="date" id="taskDate">
+        <button type="submit">➕</button>
       </form>
-      <ul id="taskList" class="space-y-2"></ul>
+      <ul id="taskList"></ul>
     </section>
 
     <!-- Alarm Section -->
-    <section class="p-5 rounded-2xl shadow-lg bg-white dark:bg-gray-800">
-      <h2 class="text-xl font-semibold mb-4">⏰ Alarms</h2>
-      <form id="alarmForm" class="flex gap-2 mb-4">
-        <input type="time" id="alarmTime"
-          class="flex-1 rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 px-3 py-2">
-        <button type="submit" class="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600">Set Alarm</button>
+    <section class="card">
+      <h2>⏰ Alarms</h2>
+      <form id="alarmForm">
+        <input type="time" id="alarmTime" required>
+        <button type="submit">Set</button>
       </form>
-      <ul id="alarmList" class="space-y-2"></ul>
+      <ul id="alarmList"></ul>
     </section>
-
   </main>
 
-  <!-- Alarm Sound -->
   <audio id="alarmSound" src="https://www.soundjay.com/buttons/beep-07.wav" preload="auto"></audio>
-
-  <script>
-    // Theme toggle
-    const themeToggle = document.getElementById("themeToggle");
-    themeToggle.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      localStorage.setItem("theme",
-        document.documentElement.classList.contains("dark") ? "dark" : "light");
-    });
-    if (localStorage.getItem("theme") === "dark") {
-      document.documentElement.classList.add("dark");
-    }
-
-    // Task Management
-    const taskForm = document.getElementById("taskForm");
-    const taskInput = document.getElementById("taskInput");
-    const taskDate = document.getElementById("taskDate");
-    const taskList = document.getElementById("taskList");
-
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-    function renderTasks() {
-      taskList.innerHTML = "";
-      tasks.forEach((t, i) => {
-        const li = document.createElement("li");
-        li.className = "flex justify-between items-center p-2 bg-gray-200 dark:bg-gray-700 rounded-lg";
-        li.innerHTML = `
-          <span>${t.text} - <small>${t.date}</small></span>
-          <button onclick="deleteTask(${i})" class="text-red-500">❌</button>
-        `;
-        taskList.appendChild(li);
-      });
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
-
-    taskForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (taskInput.value.trim() === "") return;
-      tasks.push({ text: taskInput.value, date: taskDate.value || "Today" });
-      taskInput.value = "";
-      taskDate.value = "";
-      renderTasks();
-    });
-
-    function deleteTask(i) {
-      tasks.splice(i, 1);
-      renderTasks();
-    }
-
-    renderTasks();
-
-    // Alarm Management
-    const alarmForm = document.getElementById("alarmForm");
-    const alarmTime = document.getElementById("alarmTime");
-    const alarmList = document.getElementById("alarmList");
-    const alarmSound = document.getElementById("alarmSound");
-
-    let alarms = JSON.parse(localStorage.getItem("alarms")) || [];
-
-    function renderAlarms() {
-      alarmList.innerHTML = "";
-      alarms.forEach((time, i) => {
-        const li = document.createElement("li");
-        li.className = "flex justify-between items-center p-2 bg-gray-200 dark:bg-gray-700 rounded-lg";
-        li.innerHTML = `
-          <span>${time}</span>
-          <button onclick="deleteAlarm(${i})" class="text-red-500">❌</button>
-        `;
-        alarmList.appendChild(li);
-      });
-      localStorage.setItem("alarms", JSON.stringify(alarms));
-    }
-
-    alarmForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (!alarmTime.value) return;
-      alarms.push(alarmTime.value);
-      alarmTime.value = "";
-      renderAlarms();
-    });
-
-    function deleteAlarm(i) {
-      alarms.splice(i, 1);
-      renderAlarms();
-    }
-
-    // Check alarms every second
-    setInterval(() => {
-      const now = new Date();
-      const currentTime = now.toTimeString().slice(0,5);
-      if (alarms.includes(currentTime)) {
-        alarmSound.play();
-        alert("⏰ Alarm! Time to check your task!");
-      }
-    }, 1000);
-
-    renderAlarms();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
